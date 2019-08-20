@@ -16,33 +16,58 @@ class CPU:
         pc = 0
         self.pc = pc
 
-    def load(self):
+    def load(self, filename):
         """Load a program into memory."""
 
+        # try: 
         address = 0
 
-        # For now, we've just hardcoded a program:
+        with open(filename) as f:
+            for line in f:
+                comment_split = line.split('#')
+                num = comment_split[0].strip()
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+                if num =='':
+                    continue
+                
+                value = int(num, 2)
+                print(f'value in loading {value}')
+                self.ram[address] = value
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+                address += 1
+        
+        # except FileNotFoundError:
+        #     print(f'{sys.argv[0]}: {sys.argv[1] not found}')
+        #     sys.exit()
+
+        # if len(sys.argv) != 2:
+        #     print('Usage: using file <filename>', file=sys.stderr)
+        #     sys.exit(1)
+
+
+        # address = 0
+
+        # # For now, we've just hardcoded a program:
+
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010, # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111, # PRN R0
+        #     0b00000000,
+        #     0b00000001, # HLT
+        # ]
+
+        # for instruction in program:
+        #     self.ram[address] = instruction
+        #     address += 1
     
     def ram_read(self, address):
         return self.ram[address]
 
     def ram_write(self, value, address):
         self.ram[address] = value
-        return None
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
