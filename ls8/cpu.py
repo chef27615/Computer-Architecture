@@ -7,7 +7,14 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        ram = [0] * 256
+        self.ram = ram
+        
+        reg = [0] * 8
+        self.reg = reg
+
+        pc = 0
+        self.pc = pc
 
     def load(self):
         """Load a program into memory."""
@@ -29,7 +36,13 @@ class CPU:
         for instruction in program:
             self.ram[address] = instruction
             address += 1
+    
+    def ram_read(self, address):
+        return self.ram[address]
 
+    def ram_write(self, value, address):
+        self.ram[address] = value
+        return None
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
@@ -48,8 +61,8 @@ class CPU:
 
         print(f"TRACE: %02X | %02X %02X %02X |" % (
             self.pc,
-            #self.fl,
-            #self.ie,
+            # self.fl,
+            # self.ie,
             self.ram_read(self.pc),
             self.ram_read(self.pc + 1),
             self.ram_read(self.pc + 2)
@@ -62,4 +75,25 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        running = True
+        # print('______\n')
+        # self. trace()
+        # print('______\n')
+
+        while running:
+            cmd_list = self.ram
+            for cmd in cmd_list:
+                if cmd == 130:
+                    pass
+                elif cmd == 1:
+                    running = False
+                elif cmd == 0:
+                    self.pc += 1
+                elif cmd == 8:
+                    num = cmd_list[self.pc+1]
+                elif cmd == 71:
+                    print(num)
+                else:
+                    print(f'unknown cmd: {cmd}')
+        # print(f'ram {self.ram}')
+        # print(f'pc {self.pc}')
