@@ -16,29 +16,31 @@ class CPU:
         pc = 0
         self.pc = pc
 
-    def load(self, filename):
+    def load(self):
         """Load a program into memory."""
 
-        # try: 
         address = 0
+        if len(sys.argv) != 2:
+            print('Usage: using file <filename>', file=sys.stderr)
+            sys.exit(1)
+        try: 
+            with open(sys.argv[1]) as f:
+                for line in f:
+                    comment_split = line.split('#')
+                    num = comment_split[0].strip()
 
-        with open(filename) as f:
-            for line in f:
-                comment_split = line.split('#')
-                num = comment_split[0].strip()
+                    if num =='':
+                        continue
+                    
+                    value = int(num, 2)
+                    print(f'value in loading {value}')
+                    self.ram[address] = value
 
-                if num =='':
-                    continue
-                
-                value = int(num, 2)
-                print(f'value in loading {value}')
-                self.ram[address] = value
-
-                address += 1
+                    address += 1
         
-        # except FileNotFoundError:
-        #     print(f'{sys.argv[0]}: {sys.argv[1] not found}')
-        #     sys.exit()
+        except FileNotFoundError:
+            print(f'{sys.argv[0]}: sys.argv[1] not found')
+            sys.exit()
 
         # if len(sys.argv) != 2:
         #     print('Usage: using file <filename>', file=sys.stderr)
@@ -74,7 +76,12 @@ class CPU:
 
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
-        #elif op == "SUB": etc
+        elif op == "SUB":
+            self.reg[reg_a] -= self.reg[reg_b]
+        elif op == "MUL":
+            self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "DIV":
+            self.reg[reg_a] /= self.reg[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 

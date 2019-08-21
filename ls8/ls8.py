@@ -7,17 +7,6 @@ from cpu import *
 
 cpu = CPU()
 
-print(f'{sys.argv[0]}: {sys.argv[1] not found}')
-# sys.exit()
-
-if len(sys.argv) != 2:
-    print('Usage: using file <filename>', file=sys.stderr)
-    sys.exit(1)
-
-files = argv[1]
-cpu.load(files)
-
-
-
+cpu.load()
 
 cpu.run()
